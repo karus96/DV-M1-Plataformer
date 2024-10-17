@@ -33,14 +33,38 @@ public class PlayerController : CharacterTemplate
         if(GameManager.CurrentInstance.Status != GameStatus.Play || !_isAlive)
         {
             return;           
-        }       
-
+        }
+        if (_animatorHandler.IsAnimationPlaying("Attack"))
+        {
+            return;
+        }
         float x = Input.GetAxis("Horizontal");
         
         Move(x);
     }
     private void Update()
     {
+        if (!_isAlive)
+        {
+            return;
+        }
+        if (_animatorHandler.IsAnimationPlaying("Attack"))
+        {
+            _weapon.Attack = true;
+            return;
+        }
+        else
+        {
+            _weapon.Attack = false;
+        }
+        if (Input.GetKeyDown(KeyCode.E)) 
+        {
+            _animatorHandler.Attack();           
+            return;
+        }     
+
+        
+
         float jumpForce = 1;
 
         bool jump = Input.GetKeyDown(KeyCode.Space);
@@ -53,5 +77,6 @@ public class PlayerController : CharacterTemplate
         {
             _rigidbody2D.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
         }
+        _animatorHandler.Jump(!_ground);
     }
 }

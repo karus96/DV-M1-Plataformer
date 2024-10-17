@@ -7,7 +7,13 @@ public enum GameStatus { MainMenu = 0, Pause = 1, Play = 2 }
 public class GameManager : SingletonControllerTemplate<GameManager>
 {   
     [SerializeField] private GameStatus _status;
+    [SerializeField] private int _score;
 
+    public void AddScore(int score)
+    {
+        _score += score;
+    }
+    
     public GameStatus Status => _status;
 
     public void NewGame()

@@ -8,7 +8,10 @@ public class GameManager : SingletonControllerTemplate<GameManager>
 {   
     [SerializeField] private GameStatus _status;
     [SerializeField] private int _score;
+    [SerializeField] private List<LevelController> _levelControllers;
+    [SerializeField] Transform _initialPoint;
 
+    public List<LevelController> LevelControllers { get { return _levelControllers; } }
     public void AddScore(int score)
     {
         _score += score;
@@ -16,11 +19,19 @@ public class GameManager : SingletonControllerTemplate<GameManager>
     
     public GameStatus Status => _status;
 
+    private void CreateBlockLevel()
+    {
+        int random = Random.Range(0, _levelControllers.Count);
+        LevelController levelController = Instantiate(_levelControllers[random]);
+        levelController.transform.position = _initialPoint.position;
+    }
+
     public void NewGame()
     {
         _status = GameStatus.Play;
         UIManager.CurrentInstance.CloseMainMenu();
         UIManager.CurrentInstance.OpenUI();
+        CreateBlockLevel();
     }
     public void ContinueGame()
     {
